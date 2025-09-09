@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'react-toastify/dist/ReactToastify.css';
+
+/* Toast Customization */
+.Toastify__toast {
+  @apply rounded-lg shadow-lg border-0 font-medium text-sm;
+  min-height: 64px;
+}
+
+.Toastify__toast--success {
+  @apply bg-gradient-to-r from-success-500 to-success-600 text-white;
+}
+
+.Toastify__toast--error {
+  @apply bg-gradient-to-r from-error-500 to-error-600 text-white;
+}
+
+.Toastify__toast--info {
+  @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white;
+}
+
+.Toastify__toast--warning {
+  @apply bg-gradient-to-r from-warning-500 to-warning-600 text-white;
+}
+
+.Toastify__progress-bar {
+  @apply bg-white bg-opacity-30;
+}
+
+.Toastify__close-button {
+  @apply text-white opacity-80;
+}
+
+/* Global Styles */
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/* File drag and drop animations */
+@keyframes drag-enter {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.02) rotate(1deg); }
+  100% { transform: scale(1.02) rotate(0deg); }
+}
+
+@keyframes drag-leave {
+  0% { transform: scale(1.02) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.drag-enter {
+  animation: drag-enter 0.3s ease-out forwards;
+}
+
+.drag-leave {
+  animation: drag-leave 0.2s ease-out forwards;
+}
+
+/* Progress bar animations */
+@keyframes progress-fill {
+  0% { width: 0%; }
+  100% { width: var(--progress-width); }
+}
+
+.progress-bar-fill {
+  animation: progress-fill 0.3s ease-out;
+}
+
+/* Success bounce animation */
+@keyframes success-bounce {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.success-bounce {
+  animation: success-bounce 0.6s ease-out;
+}
+
+/* File upload shimmer effect */
+@keyframes shimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 0px, #e0e0e0 40px, #f0f0f0 80px);
+  background-size: 468px 104px;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}

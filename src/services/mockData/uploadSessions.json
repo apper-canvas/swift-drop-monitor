@@ -1,0 +1,41 @@
+[
+  {
+    "Id": 1,
+    "files": [],
+    "totalSize": 0,
+    "completedSize": 0,
+    "startTime": "2024-01-15T10:30:00Z",
+    "status": "pending"
+  },
+  {
+    "Id": 2,
+    "files": [
+      {
+        "id": "1",
+        "name": "document.pdf",
+        "size": 2048576,
+        "type": "application/pdf",
+        "status": "completed",
+        "progress": 100,
+        "uploadedAt": "2024-01-15T09:45:00Z",
+        "error": null,
+        "thumbnail": null
+      },
+      {
+        "id": "2",
+        "name": "photo.jpg",
+        "size": 1536000,
+        "type": "image/jpeg",
+        "status": "completed",
+        "progress": 100,
+        "uploadedAt": "2024-01-15T09:46:00Z",
+        "error": null,
+        "thumbnail": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/..."
+      }
+    ],
+    "totalSize": 3584576,
+    "completedSize": 3584576,
+    "startTime": "2024-01-15T09:45:00Z",
+    "status": "completed"
+  }
+]
