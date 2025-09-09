@@ -1,7 +1,6 @@
 import OpenAI from "npm:openai@4.52.1";
 
 // Global declarations for apper custom action environment
-/* global apper, Response */
 apper.serve(async (request) => {
   try {
     // Only allow POST requests
