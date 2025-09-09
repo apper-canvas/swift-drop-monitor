@@ -1,5 +1,5 @@
 import uploadSessionsData from "@/services/mockData/uploadSessions.json";
-import { isImageFile } from "@/utils/fileUtils";
+import { isImageFile, simulateUpload } from "@/utils/fileUtils";
 
 class UploadService {
   constructor() {
@@ -147,8 +147,18 @@ file.error = null;
       
       throw error;
     }
-  }
+}
 
+  async getUploadHistory(limit = 10) {
+    await this.delay(300);
+    
+    const completedSessions = this.uploadSessions
+      .filter(s => s.status === "completed" && s.files.length > 0)
+      .sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
+      .slice(0, limit);
+    
+    return completedSessions.map(s => ({ ...s }));
+  }
 }
 
 // Helper function to generate image description using OpenAI
@@ -187,34 +197,5 @@ const generateImageDescription = async (file) => {
     reader.readAsDataURL(file);
   });
 };
-
-// Helper function to simulate upload progress
-const simulateUpload = async (file, onProgress) => {
-  const totalSize = file.size || 1024 * 1024; // Default 1MB if size unknown
-  const chunkSize = Math.max(totalSize / 20, 1024); // 20 chunks minimum
-  let uploaded = 0;
-
-  while (uploaded < totalSize) {
-    await new Promise(resolve => setTimeout(resolve, 50)); // Simulate network delay
-    uploaded += chunkSize;
-    const progress = Math.min((uploaded / totalSize) * 100, 100);
-    
-    if (onProgress) {
-      onProgress(progress);
-    }
-  }
-};
-
-  async getUploadHistory(limit = 10) {
-    await this.delay(300);
-    
-    const completedSessions = this.uploadSessions
-      .filter(s => s.status === "completed" && s.files.length > 0)
-      .sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
-      .slice(0, limit);
-    
-    return completedSessions.map(s => ({ ...s }));
-  }
-}
 
 export default new UploadService();

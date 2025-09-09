@@ -128,3 +128,5 @@ export const simulateUpload = (uploadFile, onProgress) => {
     }, 200 + Math.random() * 300); // Random delay between 200-500ms
   });
 };
+
+export { isImageFile };

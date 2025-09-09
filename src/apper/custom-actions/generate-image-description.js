@@ -1,10 +1,7 @@
 import OpenAI from "npm:openai@4.52.1";
-import React from "react";
-import Error from "@/components/ui/Error";
 
 // Global declarations for apper custom action environment
 /* global apper, Response */
-
 apper.serve(async (request) => {
   try {
     // Only allow POST requests
