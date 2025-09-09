@@ -1,3 +1,5 @@
+import React from "react";
+import Error from "@/components/ui/Error";
 export const formatFileSize = (bytes) => {
   if (bytes === 0) return "0 Bytes";
   
@@ -14,7 +16,7 @@ export const getFileType = (file) => {
   if (type.startsWith("video/")) return "video";
   if (type.startsWith("audio/")) return "audio";
   if (type.includes("pdf")) return "pdf";
-  if (type.includes("text")) return "text";
+if (type.includes("text")) return "text";
   if (type.includes("zip") || type.includes("rar") || type.includes("7z")) return "archive";
   return "file";
 };
@@ -76,6 +78,13 @@ export const generateThumbnail = (file) => {
     };
     reader.readAsDataURL(file);
   });
+};
+
+// Enhanced image file detection
+const isImageFile = (file) => {
+  if (!file || !file.type) return false;
+  return file.type.startsWith('image/') && 
+         ['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type);
 };
 
 export const createUploadFile = async (file, id) => {

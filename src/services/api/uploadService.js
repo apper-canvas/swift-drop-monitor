@@ -1,5 +1,5 @@
 import uploadSessionsData from "@/services/mockData/uploadSessions.json";
-import { simulateUpload } from "@/utils/fileUtils";
+import { isImageFile } from "@/utils/fileUtils";
 
 class UploadService {
   constructor() {
@@ -95,7 +95,7 @@ class UploadService {
     // Update file status to uploading
     file.status = "uploading";
     file.progress = 0;
-    file.error = null;
+file.error = null;
     
     try {
       // Simulate upload with progress updates
@@ -109,6 +109,16 @@ class UploadService {
       file.progress = 100;
       file.uploadedAt = new Date().toISOString();
       
+      // Generate description for image files
+      if (isImageFile(file.file)) {
+        try {
+          const description = await generateImageDescription(file.file);
+          file.description = description;
+        } catch (descError) {
+          console.error(`Failed to generate description for ${file.name}:`, descError);
+          // Don't fail the upload if description generation fails
+        }
+      }
       // Update session completed size
       session.completedSize = session.files
         .filter(f => f.status === "completed")
@@ -139,23 +149,61 @@ class UploadService {
     }
   }
 
-  async clearCompletedFiles(sessionId) {
-    await this.delay(200);
+}
+
+// Helper function to generate image description using OpenAI
+const generateImageDescription = async (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const base64Data = reader.result.split(',')[1]; // Remove data:image/...;base64, prefix
+        
+        const response = await fetch(`https://test-api.apper.io/fn/${import.meta.env.VITE_GENERATE_IMAGE_DESCRIPTION}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fileData: base64Data,
+            fileName: file.name,
+            mimeType: file.type
+          })
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+          resolve(result.description);
+        } else {
+          reject(new Error(result.error || 'Failed to generate description'));
+        }
+      } catch (error) {
+        reject(error);
+      }
+    };
     
-    const sessionIndex = this.uploadSessions.findIndex(s => s.Id === parseInt(sessionId));
-    if (sessionIndex === -1) throw new Error("Session not found");
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+};
+
+// Helper function to simulate upload progress
+const simulateUpload = async (file, onProgress) => {
+  const totalSize = file.size || 1024 * 1024; // Default 1MB if size unknown
+  const chunkSize = Math.max(totalSize / 20, 1024); // 20 chunks minimum
+  let uploaded = 0;
+
+  while (uploaded < totalSize) {
+    await new Promise(resolve => setTimeout(resolve, 50)); // Simulate network delay
+    uploaded += chunkSize;
+    const progress = Math.min((uploaded / totalSize) * 100, 100);
     
-    const session = this.uploadSessions[sessionIndex];
-    session.files = session.files.filter(f => f.status !== "completed");
-    session.totalSize = session.files.reduce((acc, file) => acc + file.size, 0);
-    session.completedSize = 0;
-    
-    if (session.files.length === 0) {
-      session.status = "pending";
+    if (onProgress) {
+      onProgress(progress);
     }
-    
-    return { ...session };
   }
+};
 
   async getUploadHistory(limit = 10) {
     await this.delay(300);
