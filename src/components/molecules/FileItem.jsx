@@ -101,11 +101,6 @@ const FileItem = ({ file, onRemove, className }) => {
               </Button>
             )}
           </div>
-{file.description && (
-            <p className="text-sm text-gray-600 mt-2 italic">
-              "{file.description}"
-            </p>
-          )}
         </div>
 
         <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
